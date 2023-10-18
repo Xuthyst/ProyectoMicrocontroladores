@@ -5,7 +5,7 @@ import numpy as np
 import struct
 from PIL import Image
 ser = serial.Serial(
-    port='/dev/ttyACM13',  # Use the correct serial port
+    port='COM3',  # Use the correct serial port
     baudrate=9600,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
@@ -47,7 +47,7 @@ while contador_datos < num_datos:
         #plt.show()
         # Save the image as a JPG file
         image_pil = Image.fromarray(image.astype(np.uint8))
-        image_pil.save(f"output_image{contador_datos}.jpg")
+        image_pil.save(f"imagenes/output_image{contador_datos}.jpg")
         contador_datos += 1
 
 ser.close()

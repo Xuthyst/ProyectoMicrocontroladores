@@ -37,7 +37,7 @@ void loop() {
         }
       }
       Serial.println();
-      delay(5000); // Delay de 1s para evitar succesions rapidas de captura
+      //delay(5000); // Delay de 1s para evitar succesions rapidas de captura
       contador += 1;
     }
     captureFlag = false; // Se desactiva despues de la captura
