@@ -16,7 +16,7 @@ ser = serial.Serial(
 print("Connected to: " + ser.portstr)
 
 
-num_datos = 5
+num_datos = 30  
 #num_datos = int(input("Please enter the number of data points to collect: "))
 
 contador_datos = 0
