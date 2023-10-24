@@ -8,7 +8,7 @@ int bytesPerFrame; // Cantidad de bytes por foto
 int contador;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial); // Se espera hasta que haya conexion serial
 
   initializeShield(); // Se inicializa boton
@@ -25,7 +25,7 @@ void loop() {
   bool clicked = readShieldButton();
   contador = 0;
   if (clicked && !captureFlag) {
-    while(contador <= 100){
+    while(contador <= 10){
       captureFlag = true; // Set the activa cuando el boton es presionado
       Camera.readFrame(image);
       for (int i = 0; i < bytesPerFrame - 1; i += 2) { // Se imprime cada pareja de bytes separados por una coma
@@ -39,11 +39,7 @@ void loop() {
       Serial.println();
       //delay(5000); // Delay de 1s para evitar succesions rapidas de captura
       contador += 1;
-      clicked = readShieldButton();
-      if(clicked){
-        contador = 101;
-      }
     }
-    captureFlag = false; // Se desactiva despues de la captura
+    captureFlag = true; // Se desactiva despues de la captura
   }
 }
