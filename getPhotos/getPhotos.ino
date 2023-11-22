@@ -24,8 +24,10 @@ void setup() {
 void loop() {
   bool clicked = readShieldButton();
   contador = 0;
-  if (clicked && !captureFlag) {
-    while(contador <= 10){
+  //if (clicked && !captureFlag) {
+  delay(4000);
+  if (true) {
+    while(contador <= 50){
       captureFlag = true; // Set the activa cuando el boton es presionado
       Camera.readFrame(image);
       for (int i = 0; i < bytesPerFrame - 1; i += 2) { // Se imprime cada pareja de bytes separados por una coma
