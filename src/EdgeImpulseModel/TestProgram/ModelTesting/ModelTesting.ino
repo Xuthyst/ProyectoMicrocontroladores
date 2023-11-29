@@ -140,10 +140,10 @@ void setup()
     //Serial.println("Edge Impulse Inferencing Demo");
 
     // summary of inferencing settings (from model_metadata.h)
-    ei_printf("Inferencing settings:\n");
-    ei_printf("\tImage resolution: %dx%d\n", EI_CLASSIFIER_INPUT_WIDTH, EI_CLASSIFIER_INPUT_HEIGHT);
-    ei_printf("\tFrame size: %d\n", EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE);
-    ei_printf("\tNo. of classes: %d\n", sizeof(ei_classifier_inferencing_categories) / sizeof(ei_classifier_inferencing_categories[0]));
+    //ei_printf("Inferencing settings:\n");
+    //ei_printf("\tImage resolution: %dx%d\n", EI_CLASSIFIER_INPUT_WIDTH, EI_CLASSIFIER_INPUT_HEIGHT);
+    //ei_printf("\tFrame size: %d\n", EI_CLASSIFIER_DSP_INPUT_FRAME_SIZE);
+    //ei_printf("\tNo. of classes: %d\n", sizeof(ei_classifier_inferencing_categories) / sizeof(ei_classifier_inferencing_categories[0]));
 
     //Motor Setup
     myservo.attach(11);  // attaches the servo on pin 9 to the servo object
@@ -215,8 +215,8 @@ void loop()
         }
 
         // print the predictions
-        ei_printf("Predictions (DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \n",
-                  result.timing.dsp, result.timing.classification, result.timing.anomaly);
+        //ei_printf("Predictions (DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \n",
+        //          result.timing.dsp, result.timing.classification, result.timing.anomaly);
         #if EI_CLASSIFIER_OBJECT_DETECTION == 1
         bool bb_found = result.bounding_boxes[0].value > 0;
         for (size_t ix = 0; ix < result.bounding_boxes_count; ix++) {
@@ -233,15 +233,19 @@ void loop()
         }
         #else
         //Important print
-        ei_printf("\n\n\n\n La lista es: \n");
+        //ei_printf("\n\n\n\n La lista es: \n");
         for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
-            if(valorMaximo <= result.classification[ix].value){
+            if(valorMaximo < result.classification[ix].value){
               valorMaximo = result.classification[ix].value;
               indiceValorMaximo = ix;
             }
-            ei_printf("    %s: %.5f\n", result.classification[ix].label,
-                                        result.classification[ix].value);
+            //ei_printf("    %s: %.5f\n", result.classification[ix].label,
+            //                            result.classification[ix].value);
         }
+        
+        ei_printf("\n\nLa clase identificada es: \n");
+        ei_printf("    %s: %.5f\n", result.classification[indiceValorMaximo].label,
+                                        result.classification[indiceValorMaximo].value);
         if(result.classification[indiceValorMaximo].label == "hachi"){
           ei_printf("\n\nSe debe activar el motor\n\n");
           for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
@@ -257,12 +261,9 @@ void loop()
         else{
           ei_printf("\n\nNo se debe activar el motor\n\n");
         }
-        ei_printf("\n\nLa clase identificada es: \n");
-        ei_printf("    %s: %.5f\n", result.classification[indiceValorMaximo].label,
-                                        result.classification[indiceValorMaximo].value);
                                       
         #if EI_CLASSIFIER_HAS_ANOMALY == 1
-        ei_printf("    anomaly score: %.3f\n", result.anomaly);
+        //ei_printf("    anomaly score: %.3f\n", result.anomaly);
         #endif
         #endif
 
