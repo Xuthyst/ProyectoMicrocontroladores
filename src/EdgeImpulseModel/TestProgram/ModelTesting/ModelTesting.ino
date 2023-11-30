@@ -146,7 +146,7 @@ void setup()
     //ei_printf("\tNo. of classes: %d\n", sizeof(ei_classifier_inferencing_categories) / sizeof(ei_classifier_inferencing_categories[0]));
 
     //Motor Setup
-    myservo.attach(11);  // attaches the servo on pin 9 to the servo object
+    //myservo.attach(A6);  // attaches the servo on pin 9 to the servo object
 }
 
 /**
@@ -156,11 +156,11 @@ void setup()
 */
 void loop()
 {
-    bool stop_inferencing = false;
-    float valorMaximo = 0.0;
-    int indiceValorMaximo = -1;
-
+  bool stop_inferencing = false;
     while(stop_inferencing == false) {
+      float valorMaximo = 0.0;
+      int indiceValorMaximo = -1;
+      
         //ei_printf("\nStarting inferencing in 2 seconds...\n");
 
         // instead of wait_ms, we'll wait on the signal, this allows threads to cancel us...
@@ -236,6 +236,7 @@ void loop()
         //ei_printf("\n\n\n\n La lista es: \n");
         for (size_t ix = 0; ix < EI_CLASSIFIER_LABEL_COUNT; ix++) {
             if(valorMaximo < result.classification[ix].value){
+              //ei_printf("Leyendo: %s", result.classification[ix].label);
               valorMaximo = result.classification[ix].value;
               indiceValorMaximo = ix;
             }
@@ -246,17 +247,25 @@ void loop()
         ei_printf("\n\nLa clase identificada es: \n");
         ei_printf("    %s: %.5f\n", result.classification[indiceValorMaximo].label,
                                         result.classification[indiceValorMaximo].value);
-        if(result.classification[indiceValorMaximo].label == "hachi"){
+        if(strcmp(result.classification[indiceValorMaximo].label, "hachi") == 0){
+          myservo.attach(A6);  // attaches the servo on pin 9 to the servo object
           ei_printf("\n\nSe debe activar el motor\n\n");
-          for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
+          for (pos = 60; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+            myservo.write(pos);              // tell servo to go to position in variable 'pos'
+            delay(15);                       // waits 15ms for the servo to reach the position
+          }
+          delay(4000);
+          for (pos = 0; pos <= 60; pos += 1) { // goes from 0 degrees to 180 degrees
            // in steps of 1 degree
             myservo.write(pos);              // tell servo to go to position in variable 'pos'
             delay(15);                       // waits 15ms for the servo to reach the position
           }
-          for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-            myservo.write(pos);              // tell servo to go to position in variable 'pos'
-            delay(15);                       // waits 15ms for the servo to reach the position
-          }  
+
+          
+          myservo.detach();
+          ei_printf("Comida dispensada, dentro de 10 segundos el sistema estara idle");
+          delay(10000);
+          
         }
         else{
           ei_printf("\n\nNo se debe activar el motor\n\n");
